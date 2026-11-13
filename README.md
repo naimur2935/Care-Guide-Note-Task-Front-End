@@ -127,7 +127,7 @@ For Netlify, Vercel, or another static host:
 2. Set the build command to `npm run build`.
 3. Set the publish/output directory to `dist`.
 4. The checked-in `.env.production` points to `https://care-guide-note-task-back-end.vercel.app/api`. If using another backend, set `VITE_API_URL` in the hosting provider's build environment, including the `/api` suffix.
-5. Configure the static host to rewrite unknown paths to `/index.html`, so React Router routes such as `/notes/new` work when opened directly.
+5. The repository includes Vercel and Netlify SPA fallback configuration. Keep the frontend project root set to `frontend` and redeploy after pulling these files so React Router routes such as `/notes/new` work when opened directly.
 6. Ensure the backend allows requests from the deployed site origin and serves HTTPS.
 
 The frontend build is static; it does not run the API or contain the database. Keep API secrets and database credentials exclusively in the backend deployment environment.
@@ -138,6 +138,6 @@ The frontend build is static; it does not run the API or contain the database. K
 | --- | --- |
 | “Can’t reach the API” | Confirm the backend is running and connected to MongoDB; verify the Vite `/api` proxy or deployed `VITE_API_URL`. A successful backend health URL does not by itself confirm database-backed routes are healthy. |
 | Login is rejected | Confirm the account exists, the password is correct, and the frontend is pointed at the intended backend. |
-| Refreshing a nested route returns 404 | Configure the static host's SPA fallback to `index.html`. |
+| Refreshing a nested route returns 404 | Confirm the frontend deployment includes `vercel.json` (Vercel) or the generated `dist/_redirects` file (Netlify), then redeploy. |
 | CORS error in a deployed browser | Add the frontend origin to the backend's production CORS allow-list. |
 | Attachments fail to save | Check the per-file and combined attachment limits, the API's 12 MB JSON limit, and MongoDB's document-size limit. |
