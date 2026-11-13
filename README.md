@@ -54,13 +54,13 @@ The frontend supports one API base variable:
 | --- | --- | --- |
 | `VITE_API_URL` | `/api` | API base URL used by frontend requests. |
 
-For a deployed site, define it before building. Include `/api` in the value:
+Local development uses `/api`, which the Vite dev server proxies to `http://127.0.0.1:5000`. Production builds use the checked-in `.env.production` value:
 
 ```dotenv
-VITE_API_URL=https://your-api.example.com/api
+VITE_API_URL=https://care-guide-note-task-back-end.vercel.app/api
 ```
 
-The client removes a trailing slash before appending endpoint paths. Vite-exposed environment variables are included in browser code; never place credentials or private secrets in them.
+To use a different backend, set `VITE_API_URL` in the hosting provider's build environment; provider environment variables override `.env.production`. Include the `/api` prefix. The client removes a trailing slash before appending endpoint paths. Vite-exposed environment variables are included in browser code; never place credentials or private secrets in them.
 
 ## Application routes
 
@@ -117,7 +117,7 @@ The shared API helper sends JSON request bodies with `Content-Type: application/
 
 After sign-in or registration, the token is stored in browser `localStorage` and sent with authenticated requests. On app startup the frontend validates the session with `GET /auth/me`; an invalid session is cleared and the user is returned to the login flow.
 
-The backend API contract, endpoint access levels, and environment setup are documented in [`BACKEND.md`](BACKEND.md).
+The backend API contract, endpoint access levels, and environment setup are documented in the backend repository's `README.md`.
 
 ## Deployment
 
@@ -126,7 +126,7 @@ For Netlify, Vercel, or another static host:
 1. Select the repository and set the project/root directory to `frontend`.
 2. Set the build command to `npm run build`.
 3. Set the publish/output directory to `dist`.
-4. Configure `VITE_API_URL` to the deployed backend API base URL, including `/api`.
+4. The checked-in `.env.production` points to `https://care-guide-note-task-back-end.vercel.app/api`. If using another backend, set `VITE_API_URL` in the hosting provider's build environment, including the `/api` suffix.
 5. Configure the static host to rewrite unknown paths to `/index.html`, so React Router routes such as `/notes/new` work when opened directly.
 6. Ensure the backend allows requests from the deployed site origin and serves HTTPS.
 
@@ -136,7 +136,7 @@ The frontend build is static; it does not run the API or contain the database. K
 
 | Symptom | Check |
 | --- | --- |
-| “Can’t reach the API” | Confirm the backend is running and connected to MongoDB; verify the Vite `/api` proxy or deployed `VITE_API_URL`. |
+| “Can’t reach the API” | Confirm the backend is running and connected to MongoDB; verify the Vite `/api` proxy or deployed `VITE_API_URL`. A successful backend health URL does not by itself confirm database-backed routes are healthy. |
 | Login is rejected | Confirm the account exists, the password is correct, and the frontend is pointed at the intended backend. |
 | Refreshing a nested route returns 404 | Configure the static host's SPA fallback to `index.html`. |
 | CORS error in a deployed browser | Add the frontend origin to the backend's production CORS allow-list. |
