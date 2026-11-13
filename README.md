@@ -62,6 +62,15 @@ VITE_API_URL=https://care-guide-note-task-back-end.vercel.app/api
 
 To use a different backend, set `VITE_API_URL` in the hosting provider's build environment; provider environment variables override `.env.production`. Include the `/api` prefix. The client removes a trailing slash before appending endpoint paths. Vite-exposed environment variables are included in browser code; never place credentials or private secrets in them.
 
+## Admin login credentials (testing)
+
+Use these credentials on the sign-in page when the backend has been configured with the matching test administrator:
+
+- Email: `admin@example.com`
+- Password: `Admin@12345`
+
+These are demo credentials only. Do not use them for a production administrator; change or remove them before production deployment.
+
 ## Application routes
 
 | Route | Screen | Access |
